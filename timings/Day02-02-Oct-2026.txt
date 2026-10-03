@@ -1,0 +1,11 @@
+Day 2: 
+
+Learned about Linux commands, basics
+Created EC2 again today, actually 2 instances
+toggled the security group, changed the sources and type of service
+Got to know key-pair and security groups are region specific,
+making changes to a security group will affect all the servers/instances using it
+
+All the instances having that security group will be in sync/ reflect same rules 
+connecting to instance via ssh from local machine and web socket was accomplished, 
+ams treats/sees everything in terms of source and so myip was not allowing connection on browser level

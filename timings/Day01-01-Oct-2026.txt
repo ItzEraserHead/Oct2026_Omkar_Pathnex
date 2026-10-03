@@ -1,0 +1,8 @@
+Yes.. I am late for setting up this Repo...
+
+HWat i Did on first day:
+
+Learned about Addressing, Ip Address and its classful/classless addressing
+DNS, Created Repo partially, setup not done
+Sorted the issue with AWS account
+Created EC2 Instance but got confused with security group 

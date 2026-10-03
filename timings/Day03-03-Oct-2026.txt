@@ -1,0 +1,19 @@
+What I did today:
+
+Delay in creating files, git was partially setup,
+Completing the setup now....
+This is my first file here.. in this repo
+
+Did some practice on vi editor,
+practiced some basic commands in linux
+
+On AWS instance, users cannot directly access the servers, we need to make changes to /etc/ssh/sshd_config file, toggle parameter
+PasswordAuthentication Yes
+Only after thsi, user will be allowed to connect via ssh
+
+
+Tasks/ToDo:
+Complete Git Setup
+Create and add code from L1/L2 repo, practice/learn
+Watch old video on scripting, already present on channel
+Study about environment variables
