@@ -1,0 +1,30 @@
+#Day 04
+
+Practiced Scripting in the afternoon
+Attended the session with Neeraj Bhai at 6:00 PM
+Agian started practicing Shell scripting till 8:30 PM
+After that Created an EC2 instance for Day4, 
+installed git
+created new user as userD4
+connected to github using ssh key
+cloned the repo using git clone and now creating this file at 10:12PM
+after adding this file, will raise a PR
+
+Plan is to have a setup like below:
+
+
+                    GitHub
+              Oct2026_Omkar_Pathnex
+                       │
+                    main
+                       │
+             ┌─────────┴─────────┐
+             │                   │
+         Windows PC            AWS EC2
+          master                 ?
+             │                   │
+             │                   │
+        your practice       your practice
+
+
+Create new instance daily for a week to get familiar with these things
