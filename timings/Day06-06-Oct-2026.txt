@@ -1,0 +1,14 @@
+Day-06:Devop Journey
+
+Started Learning AWS - Amazon Web Services
+
+2 Hours - Scripting
+1 Hour - Git Setup
+Added one more repo of my shell scripting to github  from local
+added new file using new branch, then created Pr, after merge delete old branch and then again sync local and remote
+
+Studied about Aws and its different services/terms
+What is landing zone, what is control tower
+Public, Private and Hybrid cloud
+IAAS, PAAS, SAAS
+IAM ,Roles, Groups  and Policy
