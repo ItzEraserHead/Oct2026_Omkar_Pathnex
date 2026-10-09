@@ -1,0 +1,4 @@
+Day 07: Devops Journey - AWS Continued
+
+Learned about while, until, continue, awk in bash scripting
+Created some scripts
