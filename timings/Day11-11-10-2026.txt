@@ -1,0 +1,5 @@
+Day 11 of DevOps Journey
+Today after leacture, first completed pending uploads on github
+then actually typed files for Day 10 and Day11 , then pushed oit too git hub
+
+Now will learn about kubernetes and prepare for evening lecture,
