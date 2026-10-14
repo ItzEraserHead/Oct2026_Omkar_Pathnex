@@ -1,0 +1,82 @@
+##Day 12 of devops Journey
+
+Spent 1-2 hours - wrting scripts for warlier days
+Watched Kubernetes upgrade video - noted some imp points for today as keytakeAways:
+
+Day 12 - Devops Journey - Kubernetes
+
+After new version release by kubernetes, within 5-6 weeks aws will bring its updated version - then starts standard support valid for 14 months (0.1 $ per hour) and after that extended support valid for more 12 months (0.6 $ per hour)
+Between these 14-12 months duration update to new version, else it will update to new version by default - 
+watch video - kubernetes upgrade - added 13 days before
+
+Real -Time-Issue:
+1: As per your vpc and subet, no ip to assign, ip exhaust in cidr - 
+Pod is not getting created, it will be in pending state
+
+2: Node Pod-IP capacity exhausted
+
+3: VPC CNI IP pool exhausted
+
+Error: InsuffircientCidrBlocks
+
+CIDR - classless inter-domain routing
+
+## Kubernetes version will never roll-back
+so add-on update first, if compitable good, else select other version, but update add-ons first and then main kubernetes
+##When you are in situation of no roll-back
+Create new cluster, divert trafiic from old cluster to new cluster
+
+list add-ons
+check - compatibility with each other/kubernetes
+may need to attach role to add-On
+
+You cannot skip a version, you need to follow sequence,
+1.35  to 1.37  - not allowed
+ 1.35 to 1.36 then1.37 
+
+By Default - 4 namespaces
+
+##Kubernetes Upgrade Lecture from September Month:
+
+Dev > QA > SQA > UAT > Staging> Prod
+
+AddOn > ControlPlane > Worker Node
+
+## When upgrading, there will be DownTime
+
+**Kubernetes Upgrade Pre-requisites: 
+1: List all add-ons / softwares installed in you eks cluster
+2: version of all the add-ons / softwares
+3: Do research for compatibility of add-ons with eks cluster and each other
+4: Do research for break changes - any add-on that is no more in use and need to remove or no need to upgrade
+eg: dcokerD was deprecated in 1.24 and we had to start with containerD
+
+##Command to list versions AWS reports as compatible with kubernetes 1.34: [ Change the version and addon name as per requirement]
+aws eks describe-addon-versions --kubernetes-version 1.34 --addon-name coredns 
+--query "addons[].addonVersions[].addonVersion"
+
+aws eks describe-addon-versions --kubernetes-version 1.34 --addon-name kubeproxy
+--query "addons[].addonVersions[].addonVersion[]"
+
+This command will list all the supported versions, best practice to upgrade to latest version
+For each addon, need to update version, not supported, change the value, try, not supported, change version, try... like this you need to follow.. 
+
+##To also identify the default-recommended version, use: [Something to try.....]
+
+aws eks describe-addon-versions \
+  --kubernetes-version 1.34 \
+  --addon-name coredns \
+  --query "addons[].addonVersions[].{Version:addonVersion,Default:compatibilities[0].defaultVersion}" \
+  --output table
+
+## Helm - Helm is a package manager for Kubernetes that uses Helm charts containing YAML templates and configuration files to deploy, configure, upgrade, roll back, and uninstall applications on a Kubernetes cluster. It simplifies application management by allowing us to manage multiple Kubernetes resources as a single release.
+
+##While updating Wroker Node:
+Safe Approach, create new node with latest K8s version and use below, 
+If only one node, no other node for creating replacement pod on, Pods will be in Pending State
+
+##Cordon: Cordon means preventing new pods from being scheduled on a node. The pods already running on that node continue running.
+
+##Drain: Drain means safely evicting the existing pods from a node so we can perform maintenance, such as a Kubernetes upgrade. If those pods are managed by Deployments or other controllers, replacement pods can be created and scheduled on other available nodes.
+If no other worker node is present/available, pods will be in pending state, application will be in downstate
+

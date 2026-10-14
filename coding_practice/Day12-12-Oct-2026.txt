@@ -1,0 +1,113 @@
+## Day 12 - File Content, RDS Skeleton, Rolling Update, Backup
+
+## Ansible -- Ensure File with content
+
+---
+- name: create config file for pathnex
+  hosts: all
+  become: true
+
+  tasks:
+    - name: write content to file
+      copy:
+        dest: /etc/pathnex.conf
+        content: |
+          Welcome to Pathnex Devops Training
+          Today is Day 12
+
+
+## Terraform -- RDS Skeleton
+
+resource "aws_db_instance" "PathnexRDS" {
+  allocated_storage = 20
+  engine = "mysql"
+  instance_class = "db.t3.micro"
+  name = "pathnex"
+  username = "admin"
+  password = "password123"
+  skip_final_snapshot = true
+}
+
+## Kubernetes -- Rolling Update Strategy
+
+apiVersion: api/v1
+kind: Deployment
+metadata:
+  name: pathnex-rolling
+spec:
+  replica: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: roll
+  template:
+    metadata:
+      labels:
+        app: roll
+    spec: 
+      containers:
+        - name: web
+          image: nginx
+
+
+## Shell Scripting -- Backup Directory
+
+#!/bin/bash
+
+SOURCE="/var/log"
+DEST="/backup/pathnex-$(date +%F).tar.gz"
+
+tar -czf $DEST $SOURCE
+echo "Backlup created at $DEST"
+
+
+# Multi-Branch Pipeline
+
+## Jenkins PipeLine -- Multi-Branch
+You will learn how to **Handle multiple branches in jenkins pipelines**
+
+pipeline {
+    agent any
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+}
+    stages {
+        stage('Checkout') {
+            steps {
+                checkoput scm
+}
+}
+         stage ('Build') {
+             steps {
+                 sh 'mvn clean compile'
+}
+}
+}
+}
+
+
+## GitLab CI = Branch Specific Jobs
+you will learn ho to  **run jobs for specific branches in GitLab CI**
+
+stages:
+  - build
+
+build-main:
+  stage: build
+  image: maven:3.8.1-jdk-17
+  script:
+    - mvn clean compile
+  only:
+    - main
+
+  build-dev:
+    stage: build
+    image: maven:3.8.1-jdk-17
+    script:
+      - mvn clean compile
+    only:
+      - dev
