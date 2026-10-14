@@ -1,0 +1,32 @@
+# Day13 - DevOps Journey - Kubernetes
+
+Learned few new things, need to rewatch the videos and do pratical as well
+
+##########Key TakeAways form morning session:###################
+
+Day 13 - DevOps Journey - Kubernetes
+
+Cluster Creation Using Terraform
+
+Make changes to all files. chnage subnet value, instance name, etc
+after terraform apply, master and worker nodes will be created
+you should setup your aws account in your local system to rum kubectl command on cli to manage, interract with kubernetes on cloud
+kubens - Package - to run alias of kubectl comamnds 
+
+Fun Practical Session - 
+
+Anti-affinity - for High availability - No 2 pods in same node
+affinity - on pod level for speed/ low latency - 2 pods in same node for low latency/ fast communication
+
+##Probes: Settings can be customized
+Startup - has it started ? -- started successfully ? 
+LiveNess - livez -  should it be restarted ?  - zinda bhi ho
+ReadyNess - readyz -  should it receive traffic / handle request ?  -- kaam krr sakte ho 
+imagepullpolicy: ifnotpull / never / always | from registry
+
+***what are the Service types in kubernetes?
+cluster ip
+node port
+load balancer
+externalName
+
