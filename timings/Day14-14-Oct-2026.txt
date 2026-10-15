@@ -1,0 +1,36 @@
+## Day 14 - DevOps Journey - Kubernetes
+
+Without Namespace - application run will fail
+Namespace is mandate before running application in kubernetes
+
+kubectl get svc
+
+k exec -it "pod_id"-n namespace --/bin/bash
+
+pod -> deployment -> logs : trouble shooting
+
+Flow:
+End User - Browser - ALB - VirtualService/GateWay - Routed to app
+
+routing config
+
+Istio - Ingress
+
+kind: gateway / virtualService
+
+RTO and RPO - related to HA
+
+istio and lb in same namespace, 
+
+deleted istio-ingress / virtual service
+working of node_port - 
+
+Add - loadbalancer at nodeport
+
+LB - is an IP, from start, live and running - ready for traffic - it may take some time, not that quick, will not be up in micro seconds
+
+Before Terraform Destroy - delete istio ingress, or else evrything will be removed but LB will be running in the backend 
+
+To Do:
+Deployment vs DaemonSet vs StatefulSet
+Stateful vs Stateless application in EKS
