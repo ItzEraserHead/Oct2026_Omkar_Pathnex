@@ -1,0 +1,45 @@
+##Day 15 - DevOps Journey - Kubernetes
+
+arn and certificate - new - each time you create cluster or other resources on cloud 
+hence, we need to config our cluster everytime we create after destroying
+
+create namespace before running istio.yaml
+
+gp2 vs gp3 - latest is gp3, it is faster
+
+Rolling Update: 2 version - v1(old) n v2(new)
+max-unavailable - kitna bhaga sakte ho from v1 ||  max surge - kitna bana sakte ho in v2
+
+PDB - [ Pod Distribution Budget | Pod Disruption Budget ]
+
+Cordon: node on which you apply cordon, No new pod will be scheduled/assigned to that node
+Drain: Remove pod from this node, maybe created in new node or will be in pending state as per node availability
+
+k rollout restart deployment deplotment_name
+
+k delete 
+
+k drain nodename --delete-emptydir-data --ignore-daemonsets
+
+k uncordon node_name
+
+Why use metric server ? - autoscaling pod - karpenter
+event based pod creation/scaling - keda
+
+Kubelet - Metric Server - HPA - Deployment/ReplicaSet
+
+##Scaling:
+Vertical Scaling - size / cpu /ram increase - config change/ scale (VerticalPodAuroScaling) - Downtime here
+Horizontal Scaling - add more pods (HorizontalPodAutoScaling - HPA )
+
+Taints - Node Level - some categorisation - allowed for pod memory intensive
+Toleration/Tolerants - Pod Level - check taints of node and accordingly pod creation decided/happens
+
+To Do:
+##  Init vs Sidecar container 
+Init - setup and initialize, run before application start, setup environment so app can run, and exit before main app starts
+SideCar - Support main app, low latency requirement, log, monitoring, storage, etc
+
+PVC - Request for persistent storage
+PV - Persistent storage resource
+pv and pvc works together, so your app can use pv using pvc
