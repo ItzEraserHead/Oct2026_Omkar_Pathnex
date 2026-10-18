@@ -1,0 +1,10 @@
+## Day 18 :  Devops Journey
+
+Was watching lecture, realted to Kubernetes
+created the cluster, deleted node via cli
+faced issue, instance was present but pods in pending state
+logged in to instance via ssh(added new inbound rule in eks cluster sg)
+restarted the kubelet service and node was visible, 
+again pods in running state
+
+script practice done
