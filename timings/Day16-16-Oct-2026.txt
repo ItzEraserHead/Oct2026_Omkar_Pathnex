@@ -1,0 +1,7 @@
+## Day 16 - Tasks Performed
+
+Practiced Scripting for 3 hours
+Watched old lecture related to Kubernetes and cluster creation
+Prepared Intro video
+Created cluster, made some mistakes but rectified and resolved as well
+Destroyed the cluster again
