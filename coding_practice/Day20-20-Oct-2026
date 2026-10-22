@@ -1,0 +1,100 @@
+## Day 20 - Debugging Day
+
+## Ansible 
+
+---
+- name: Install httpd
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Install the app
+      dnf:
+        name: htppd
+        state: present
+
+    - name: Enable this thing
+      service:
+        name: httpd
+        state: present
+        enabled: yes
+
+## Terraform -- 
+
+provider "aws" {
+    region = "ap-south-1"
+}
+
+resource "aws_instance" "Bad" {
+    ami = "ami-01234abcd1234-abcd"
+    instance_type = "c6i.8xlarge"
+}
+
+
+## Kubernetes
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broken-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: broken
+    template:
+      metadata:
+        Labels:
+          app: broken
+      spec:
+        containers:
+          - name: app
+            image: nginx
+
+
+##  Secrets & Credentials
+
+## jenkins Pipeline -- Using Credentials
+you will learn how to **use credentails securely in Jenkins**
+
+pipeline {
+    agent any
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+    }
+
+stages {
+    stage('Checkout') {
+        steps {
+            git url: 'https://github.com/Pathnex/sample-java-app.git'
+        }
+    }
+    stage('USer Secret') {
+        steps {
+            withCredentials([
+                string(
+                    credentialsId: 'PATHENX_API_KEY',
+                    variable: 'API_KEY'
+                )
+            ]) {
+                sh 'echo "Using secret $API_KEY for $INSTITUTE_NAME"'
+            }
+        }
+    }
+}
+}
+
+## GitLab CI -- Using CI/CD Variables
+
+stages: 
+  - build
+
+variables:
+  INSTITUTE_NAME: "Pathnex"
+  API_KEY: "PLACEHOLDER_SECRET"
+
+build:
+  stage: build
+  image: alpine:latest
+  script:
+    - echo "Using secret $API_KEY for $INSTITUTE_NAME"
