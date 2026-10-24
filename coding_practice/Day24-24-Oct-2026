@@ -1,0 +1,133 @@
+## Day 24 -- template, ALb Listerner, PV/PVC, Menu System
+
+## Ansible
+
+---
+- name: Deploy Pathnex Template
+  hosts: all
+  become: true
+
+  tasks:
+    - name: create config
+      template:
+        src: pathnex.conf.j2
+        dest: /etc/pathnex.conf
+
+## Terraform:
+
+provider "aws" {
+    region = "ap-south-1"
+}
+
+resource "aws_lb_listener" "PathnexListener" {
+    load_balancer_arn = aws_lb.PathnexALB.arn
+    port = "80"
+    protocol = "HTTP"
+
+    default_action {
+        type = "fixed-response"
+        fixed_response {
+            content_type = "text/plain"
+            message_body = "Pathnex ALB  Running"
+            status_code = "200"
+        }
+    }
+}
+
+## Kubernetes:
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pathnex-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data/pathnex
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pathnex-pvc 
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi   
+
+## Shell Script
+
+#!/bin/bash
+echo "1. Show date"
+echo "2. show uptime"
+echo "3. show users"
+
+read -p "choose one option" opt
+
+case "$opt" in
+    1) date ;;
+    2) uptime ;;
+    3) who ;;
+    *) echo "Invalid argument ji" ;;
+esac
+
+## Automated Pipeline testing
+
+## Jenkins PipeLine - run init and integration testing
+
+pipeline {
+    agent any
+
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+        TEAM = "QA"
+        ENV = "dev"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/Pathnex/smple-java-app.git'
+            }
+        }
+        stage('Unit test') {
+            steps {
+                sh 'mvn test =Dgroup=unit'
+            }
+        }
+        stage('Integration test') {
+            steps {
+                sh 'echo "Tests completed for $INSTITUTE_NAME by $TEAM in $ENV environment"'
+            }
+        }
+    }
+}
+
+## GitLab CI
+
+stages:
+  - unit
+  - integration
+
+variables: 
+  INSTITUTE_NAME: "Pathnex"
+  TEAM: "QA"
+  ENV: "dev"
+  
+unit-test:
+  stage: unit
+  image: maven:3.8.1-jdk-17
+  script:
+    - mvn test -Dgroup=unit
+    - echo "Unit tests completed for $INSTITUTE_NAME by $TEAM in $ENV"
+
+integration-test:
+  stage: integration
+  image: maven:3.8.1-jdk-17
+  script:
+    - mvn verify -Dgroup=integration
+    - echo "Integration tests completed for $INSTITUTE_NAME by $TEAM in $ENV"
