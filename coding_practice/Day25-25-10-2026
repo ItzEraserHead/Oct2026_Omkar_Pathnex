@@ -1,0 +1,105 @@
+## Day 25 -- Linefile, Key Pair, Multi-Container, File Count
+
+## Ansible
+
+---
+- name: Update SSH config for pathnex
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Disable root login
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+
+## Terraform
+
+resource "aws_key_pair" "PathnexKey" {
+    key_name = "PathnexKey"
+    public_key == file("~/.ssh/id_rsa.pub")
+}
+
+output "Pathnex_Key_Name" {
+    value = aws_key_pair.PathnexKey.key_name
+}
+
+## Kubernetes
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pathnex-sidecar
+spec:
+  containers:
+    - name: app
+      image: nginx
+    - name: log-writer
+      image: busybox
+      command: ["sh", "-c", "while true; do echo log entry; sleep 5; done"] 
+
+
+## Shell Script:
+
+#!/bin/bash
+
+DIR="/var/log"
+
+count=$(ls -lrt | wc -l)
+
+echo "Total files under $DIR: $count"
+
+
+## Advanced
+
+## Jenkins
+
+pipeline {
+    agent any
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+        TEAM = "DevOps"
+        ENV = "staging"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/ItzEraserHead/sample-java-app.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh '''
+                if [ -d ".m2" ]; then
+                echo "Using cached dependencies for $INSTITUTE_NAME in $ENV by $TEAM"
+                else
+                mvn clean compile
+                fi
+                '''
+            }
+        }
+    }
+}
+
+## GitLab CI
+
+stages:
+  - build
+
+variables:
+  INSTITUTE_NAME: "Pathnex"
+  TEAM: "DevOps"
+  ENV: "staging"
+
+build:
+  stage: build
+  image: maven:3.8.1-jdk-17
+  cache:
+    key: "${ENV}"-maven-cache
+    paths:
+      - ,m2/repository
+  script:
+    - mvn clean compile
+    - echo "Cached dependencies for $INSTITUTE_NAME in $ENV by $TEAM"
