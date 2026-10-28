@@ -1,0 +1,78 @@
+## Day 28 - Debugg Day
+
+## Ansible
+
+---
+- name: Deugging install nginx yaml file
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Installing here
+      dnf:
+        name: nginx
+        state: present
+
+## Terraform
+
+resource "āws_s3_bucket" "Terra_bucket" {
+    bucket = "pathnex-bucket"
+}
+
+## Kubernetes
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug_pod
+spec:
+  containers:
+    - name: app
+      image: nginx
+
+
+## RollBack Strategy
+
+pipeline {
+    agent any
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+        TEAM = "DevOps"
+        ENV = "prod"
+    }
+    stages {
+        stage('Deploy') {
+            steps {
+                script {
+                    try {
+                        sh 'echo "Deploying $INSTITUTE_NAME app in $ENV for $TEAM team"'
+                        sh 'exit 1' // simulate failure
+                    }
+                    catch (Exception e) {
+                        echo "Deployment failed, Rolling back $INSTITUTE_NAME app in $ENV"
+                        throw e
+                    }
+                }
+            }
+        }
+    }
+}
+
+## GitLab CI
+
+stages:
+  - deploy
+
+variables: 
+  INSTITUTE_NAME: "Pathnex"
+  TEAM = "DevOps"
+  ENV = "Prod"
+
+here_deploy:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "Deploying $INSTITUTE_NAME app in $ENV for $TEAM"
+    - exit 1
+  after_script:
+    - echo "Deplyment failent, Rolling Back $INSTITUTE_NAME app in $ENV"  
